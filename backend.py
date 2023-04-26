@@ -21,6 +21,17 @@ def get_data(place):
     return filter_by_day
 
 
+def get_12_hour(time_24):
+    hours = int(time_24[:2])
+    if hours > 12:
+        return str(hours - 12) + time_24[2:] + " PM"
+    if hours == 0:
+        return "12" + time_24[2:] + " AM"
+    if hours == 12:
+        return time_24 + " PM"
+    return time_24 + " AM"
+
+
 if __name__ == "__main__":
     # pprint(get_data("Tokyo", None, None))
     data = get_data("Tokyo")
