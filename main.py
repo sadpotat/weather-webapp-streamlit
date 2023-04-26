@@ -4,7 +4,7 @@ from backend import get_data, get_12_hour
 
 
 st.set_page_config(page_title="Weather",
-                   page_icon=":sun_with_face:", layout="wide")
+                   page_icon=":sun_with_face:", layout="centered")
 
 location = st.text_input("City/Country: ", placeholder="Enter a location",
                          help="Enter a city or country's name to view its weather forecast")
@@ -50,7 +50,7 @@ if location:
             sky_condition = point["weather"][0]["main"]
             time_now = get_12_hour(point["dt_txt"][11:-3])
 
-            start, col1, col2, end = st.columns([1, 1, 1, 1])
+            col1, mid, col2, end = st.columns([1, 1, 1, 1])
 
             with col1:
                 st.metric(f"{time_now}", f"{(temp/10):.2f} °C", delta=f"Feels like {(feel/10):.2f} °C",
@@ -76,7 +76,7 @@ if location:
             sky_condition = point["weather"][0]["main"]
             time_now = get_12_hour(point["dt_txt"][11:-3])
 
-            start, col1, col2, end = st.columns([1, 1, 1, 1])
+            col1, mid, col2, end = st.columns([1, 1, 1, 1])
 
             with col1:
                 st.metric(f"{time_now}", f"{(temp/10):.2f} °C", delta=f"Feels like {(feel/10):.2f} °C",
