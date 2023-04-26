@@ -13,9 +13,18 @@ st.subheader(f"{option} for the next {days} days in {place}")
 
 if place:
     # get temperature/sky data
-    filtered_data = get_data(place, days)
+    while True:
+        try:
+            filtered_data = get_data(place, days)
+            break
+        except:
+            st.warning('The place does not exist!', icon="⚠️")
+            # st.write("Place does not exist")
+            st.stop()
+
     if option == "Temperature":
-        temperatures = [reading["main"]["temp"] for reading in filtered_data]
+        temperatures = [reading["main"]["temp"] /
+                        10 for reading in filtered_data]
         dates = [reading["dt_txt"] for reading in filtered_data]
         # Create temperature plot
         figure = px.line(x=dates, y=temperatures, labels={
@@ -23,6 +32,9 @@ if place:
         # gets figure object as input. Alternate libraries: Plotly, Bokeh
         st.plotly_chart(figure)
     elif option == "Sky":
-        filtered_data = [reading["weather"][0]["main"]
-                         for reading in filtered_data]
-        st.image()
+        sky_conditions = [reading["weather"][0]["main"]
+                          for reading in filtered_data]
+        images = {"Clear": "images/clear.png", "Clouds": "images/cloud.png",
+                  "Rain": "images/rain.png", "Snow": "images/snow.png"}
+        imagepaths = [images[condition] for condition in sky_conditions]
+        st.image(imagepaths, width=100)
