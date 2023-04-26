@@ -1,31 +1,34 @@
 import streamlit as st
 import plotly.express as px
 from backend import get_data
+import streamlit as st
 
+st.set_page_config(page_title="Weather",
+                   page_icon=":sun_with_face:", layout="wide")
 
 st.title("Weather Forecast for the Next Days")
-place = st.text_input("Place: ")
+location = st.text_input("City/Country: ")
 days = st.slider("Forecast Days", min_value=1, max_value=5,
                  help="Select the number of forecasted days")
 option = st.selectbox("Select data to view", ("Temperature", "Sky",))
-st.subheader(f"{option} for the next {days} days in {place}")
+st.subheader(f"{option} for the next {days} days in {location}")
 
 
-if place:
+if location:
     # get temperature/sky data
     while True:
         try:
-            filtered_data = get_data(place, days)
+            data = get_data(location, days)
             break
         except:
-            st.warning('The place does not exist!', icon="⚠️")
-            # st.write("Place does not exist")
+            st.warning('The City/Country does not exist!', icon="⚠️")
+            # st.write("City/Country does not exist")
             st.stop()
 
     if option == "Temperature":
         temperatures = [reading["main"]["temp"] /
-                        10 for reading in filtered_data]
-        dates = [reading["dt_txt"] for reading in filtered_data]
+                        10 for reading in data]
+        dates = [reading["dt_txt"] for reading in data]
         # Create temperature plot
         figure = px.line(x=dates, y=temperatures, labels={
             "x": "Date", "y": "Temperature"})
@@ -33,7 +36,7 @@ if place:
         st.plotly_chart(figure)
     elif option == "Sky":
         sky_conditions = [reading["weather"][0]["main"]
-                          for reading in filtered_data]
+                          for reading in data]
         images = {"Clear": "images/clear.png", "Clouds": "images/cloud.png",
                   "Rain": "images/rain.png", "Snow": "images/snow.png"}
         imagepaths = [images[condition] for condition in sky_conditions]
