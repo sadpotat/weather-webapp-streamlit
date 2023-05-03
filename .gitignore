@@ -1,5 +1,4 @@
 happy.csv
 student_project.py
 api_key.txt
-__pycache__/*
-__pycache__/backend.cpython-310.pyc
+__pycache__\*
